@@ -18,86 +18,107 @@ export default function RunDetailPage() {
     queryFn: () => api.papers.list(id),
   });
 
-  if (loadingRun) return <p className="text-gray-500">Loading…</p>;
-  if (!run) return <p className="text-red-600">Run not found.</p>;
+  if (loadingRun) return <p className="text-cyber-cyan font-mono animate-pulse">&gt; Fetching run data...</p>;
+  if (!run) return <p className="neon-pink font-mono">✗ RUN NOT FOUND</p>;
 
   return (
     <div>
-      <nav className="mb-4 text-sm text-gray-500">
-        <Link href="/projects" className="hover:underline">Projects</Link>
-        <span className="mx-2">/</span>
-        <Link href={`/projects/${id}`} className="hover:underline">Project</Link>
-        <span className="mx-2">/</span>
-        <span className="text-gray-900">Run {run.id.slice(0, 8)}…</span>
-      </nav>
+      {/* Breadcrumb */}
+      <p className="text-xs text-cyber-muted font-mono mb-6">
+        <Link href="/projects" className="hover:text-cyber-cyan transition-colors">PROJECTS</Link>
+        <span className="mx-2 text-cyber-border/40">/</span>
+        <Link href={`/projects/${id}`} className="hover:text-cyber-cyan transition-colors">PROJECT</Link>
+        <span className="mx-2 text-cyber-border/40">/</span>
+        <span className="text-cyber-cyan">RUN {run.id.slice(0, 8).toUpperCase()}</span>
+      </p>
 
-      <h1 className="mb-2 text-2xl font-bold">Run Detail</h1>
+      {/* Run metadata card */}
+      <div className="cyber-card relative p-6 mb-8">
+        <div className="corner-tl corner-br" />
+        <p className="text-xs text-cyber-muted font-mono mb-1 uppercase tracking-widest">Pipeline Execution</p>
+        <h1 className="cyber-heading text-xl font-bold neon-cyan mb-6">
+          Run Log
+        </h1>
 
-      {/* Run metadata */}
-      <div className="mb-6 rounded-lg border border-gray-200 bg-white p-5">
-        <dl className="grid grid-cols-2 gap-3 text-sm">
+        <div className="grid grid-cols-2 gap-6 text-sm font-mono mb-6">
           <div>
-            <dt className="font-medium text-gray-500">Status</dt>
-            <dd className="mt-1">{run.status}</dd>
+            <p className="text-xs text-cyber-muted uppercase tracking-widest mb-1">Status</p>
+            <span className={`border px-2 py-0.5 text-xs ${
+              run.status === "pending"   ? "badge-pending"   :
+              run.status === "running"   ? "badge-running"   :
+              run.status === "completed" ? "badge-completed" : "badge-failed"
+            }`}>
+              {run.status.toUpperCase()}
+            </span>
           </div>
           <div>
-            <dt className="font-medium text-gray-500">Created</dt>
-            <dd className="mt-1">{new Date(run.created_at).toLocaleString()}</dd>
+            <p className="text-xs text-cyber-muted uppercase tracking-widest mb-1">Run ID</p>
+            <p className="text-cyber-cyan">{run.id.slice(0, 16).toUpperCase()}…</p>
           </div>
           <div>
-            <dt className="font-medium text-gray-500">Completed</dt>
-            <dd className="mt-1">{run.completed_at ? new Date(run.completed_at).toLocaleString() : "—"}</dd>
+            <p className="text-xs text-cyber-muted uppercase tracking-widest mb-1">Initiated</p>
+            <p>{new Date(run.created_at).toLocaleString()}</p>
           </div>
-          <div className="col-span-2">
-            <dt className="font-medium text-gray-500">Config Snapshot</dt>
-            <dd className="mt-1">
-              <pre className="overflow-x-auto rounded bg-gray-50 p-2 text-xs">
-                {JSON.stringify(run.config_snapshot, null, 2)}
-              </pre>
-            </dd>
+          <div>
+            <p className="text-xs text-cyber-muted uppercase tracking-widest mb-1">Completed</p>
+            <p>{run.completed_at ? new Date(run.completed_at).toLocaleString() : <span className="text-cyber-muted">—</span>}</p>
           </div>
-        </dl>
+        </div>
+
+        <div>
+          <p className="text-xs text-cyber-muted uppercase tracking-widest mb-2 font-mono">Config Snapshot</p>
+          <pre className="bg-cyber-bg border border-cyber-border/20 p-4 text-xs text-cyber-cyan overflow-x-auto">
+            {JSON.stringify(run.config_snapshot, null, 2) || "{}"}
+          </pre>
+        </div>
       </div>
 
-      {/* Papers table */}
-      <section>
-        <h2 className="mb-3 text-lg font-semibold">Papers in This Project</h2>
+      {/* Papers section */}
+      <div className="mb-4">
+        <p className="text-xs text-cyber-muted font-mono mb-1 uppercase tracking-widest">&gt; Indexed Papers</p>
+        <h2 className="cyber-heading text-lg font-bold text-cyber-cyan">Papers</h2>
+      </div>
 
-        {loadingPapers && <p className="text-gray-500">Loading papers…</p>}
+      {loadingPapers && (
+        <p className="text-cyber-cyan font-mono text-sm animate-pulse">&gt; Scanning paper database...</p>
+      )}
 
-        {papers && papers.length === 0 && (
-          <p className="text-gray-500 text-sm">No papers added to this project yet.</p>
-        )}
+      {papers && papers.length === 0 && (
+        <div className="cyber-card p-6 text-center">
+          <p className="text-cyber-muted font-mono text-sm">
+            No papers indexed in this project yet.
+          </p>
+        </div>
+      )}
 
-        {papers && papers.length > 0 && (
-          <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Authors</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Year</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score</th>
+      {papers && papers.length > 0 && (
+        <div className="cyber-card overflow-hidden">
+          <table className="w-full text-sm font-mono">
+            <thead>
+              <tr className="border-b border-cyber-border/20 text-xs uppercase tracking-widest text-cyber-muted">
+                <th className="px-4 py-3 text-left">Title</th>
+                <th className="px-4 py-3 text-left">Authors</th>
+                <th className="px-4 py-3 text-left">Year</th>
+                <th className="px-4 py-3 text-left">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {papers.map((pp) => (
+                <tr key={pp.id} className="border-b border-cyber-border/10 hover:bg-cyber-border/5 transition-colors">
+                  <td className="px-4 py-3 text-cyber-cyan">{pp.paper.title}</td>
+                  <td className="px-4 py-3 text-cyber-muted">{pp.paper.authors.join(", ") || "—"}</td>
+                  <td className="px-4 py-3 text-cyber-muted">{pp.paper.year ?? "—"}</td>
+                  <td className="px-4 py-3">
+                    {pp.score !== null
+                      ? <span className="neon-green">{pp.score.toFixed(2)}</span>
+                      : <span className="text-cyber-muted">—</span>}
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {papers.map((pp) => (
-                  <tr key={pp.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm font-medium">{pp.paper.title}</td>
-                    <td className="px-4 py-3 text-sm text-gray-500">
-                      {pp.paper.authors.join(", ") || "—"}
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-500">{pp.paper.year ?? "—"}</td>
-                    <td className="px-4 py-3 text-sm text-gray-500">
-                      {pp.score !== null ? pp.score.toFixed(2) : "—"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

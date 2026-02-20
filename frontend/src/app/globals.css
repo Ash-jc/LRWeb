@@ -1,3 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    background-color: #05050f;
+    color: #c8c8f0;
+    font-family: 'Share Tech Mono', ui-monospace, monospace;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #05050f; }
+  ::-webkit-scrollbar-thumb { background: #00e5ff44; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #00e5ff; }
+}
+
+@layer components {
+  /* Neon text */
+  .neon-cyan {
+    color: #00e5ff;
+    text-shadow: 0 0 8px #00e5ff, 0 0 20px rgba(0,229,255,0.6);
+  }
+  .neon-pink {
+    color: #ff00aa;
+    text-shadow: 0 0 8px #ff00aa, 0 0 20px rgba(255,0,170,0.6);
+  }
+  .neon-green {
+    color: #39ff14;
+    text-shadow: 0 0 8px #39ff14, 0 0 20px rgba(57,255,20,0.6);
+  }
+
+  /* Card */
+  .cyber-card {
+    background: #0d0d1f;
+    border: 1px solid #00e5ff44;
+    box-shadow: 0 0 1px #00e5ff, inset 0 0 30px rgba(0,229,255,0.03);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .cyber-card:hover {
+    border-color: #00e5ff;
+    box-shadow: 0 0 10px #00e5ff, 0 0 30px rgba(0,229,255,0.2), inset 0 0 30px rgba(0,229,255,0.05);
+  }
+
+  /* Buttons */
+  .btn-cyber {
+    background: transparent;
+    border: 1px solid #00e5ff;
+    color: #00e5ff;
+    text-shadow: 0 0 8px #00e5ff;
+    box-shadow: 0 0 8px #00e5ff44, inset 0 0 8px rgba(0,229,255,0.05);
+    transition: all 0.2s;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .btn-cyber:hover {
+    background: rgba(0,229,255,0.1);
+    box-shadow: 0 0 16px #00e5ff, 0 0 40px rgba(0,229,255,0.3), inset 0 0 16px rgba(0,229,255,0.1);
+  }
+  .btn-cyber:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .btn-pink {
+    background: transparent;
+    border: 1px solid #ff00aa;
+    color: #ff00aa;
+    text-shadow: 0 0 8px #ff00aa;
+    box-shadow: 0 0 8px rgba(255,0,170,0.3);
+    transition: all 0.2s;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .btn-pink:hover {
+    background: rgba(255,0,170,0.1);
+    box-shadow: 0 0 16px #ff00aa, 0 0 40px rgba(255,0,170,0.3);
+  }
+
+  /* Input */
+  .cyber-input {
+    background: #080815;
+    border: 1px solid #00e5ff44;
+    color: #c8c8f0;
+    outline: none;
+    font-family: 'Share Tech Mono', monospace;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .cyber-input:focus {
+    border-color: #00e5ff;
+    box-shadow: 0 0 8px #00e5ff44;
+  }
+  .cyber-input::placeholder {
+    color: #4a4a7a;
+  }
+
+  /* Grid overlay */
+  .cyber-grid {
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* Section header */
+  .cyber-heading {
+    font-family: 'Orbitron', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Status badges */
+  .badge-pending   { color: #ffe600; border-color: #ffe600; text-shadow: 0 0 6px #ffe600; box-shadow: 0 0 6px rgba(255,230,0,0.3); }
+  .badge-running   { color: #00e5ff; border-color: #00e5ff; text-shadow: 0 0 6px #00e5ff; box-shadow: 0 0 6px rgba(0,229,255,0.3); }
+  .badge-completed { color: #39ff14; border-color: #39ff14; text-shadow: 0 0 6px #39ff14; box-shadow: 0 0 6px rgba(57,255,20,0.3); }
+  .badge-failed    { color: #ff00aa; border-color: #ff00aa; text-shadow: 0 0 6px #ff00aa; box-shadow: 0 0 6px rgba(255,0,170,0.3); }
+
+  /* Divider */
+  .cyber-divider {
+    border-color: #00e5ff22;
+  }
+
+  /* Corner decoration */
+  .corner-tl::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 12px; height: 12px;
+    border-top: 2px solid #00e5ff;
+    border-left: 2px solid #00e5ff;
+  }
+  .corner-br::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 12px; height: 12px;
+    border-bottom: 2px solid #00e5ff;
+    border-right: 2px solid #00e5ff;
+  }
+}
